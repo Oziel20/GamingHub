@@ -1,0 +1,27 @@
+<ContentDialog
+    x:Class="GamingHub.App.Views.TicketDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Ticket de compra"
+    PrimaryButtonText="Imprimir"
+    SecondaryButtonText="Abrir carpeta"
+    CloseButtonText="Cerrar"
+    DefaultButton="Primary"
+    PrimaryButtonClick="Print_Click"
+    SecondaryButtonClick="OpenFolder_Click">
+
+    <StackPanel Spacing="10" Width="400">
+        <InfoBar x:Name="StatusBar" IsOpen="False" IsClosable="True" Severity="Error" />
+
+        <!-- Hoja blanca con tipografía monoespaciada, como un ticket real -->
+        <Border Background="#FFFFFF" CornerRadius="6" Padding="14">
+            <ScrollViewer MaxHeight="420" HorizontalScrollBarVisibility="Auto">
+                <TextBlock x:Name="TicketText" FontFamily="Consolas" FontSize="12" Foreground="#111111"
+                           TextWrapping="NoWrap" IsTextSelectionEnabled="True" />
+            </ScrollViewer>
+        </Border>
+
+        <TextBlock x:Name="SavedText" FontSize="11" TextWrapping="Wrap"
+                   Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+    </StackPanel>
+</ContentDialog>

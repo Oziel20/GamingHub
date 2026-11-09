@@ -1,0 +1,62 @@
+<Page
+    x:Class="GamingHub.App.Views.LoginPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Background="{StaticResource BgBrush}">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <Border Width="440" Margin="0,30" Padding="28" CornerRadius="10" Background="{StaticResource PanelBrush}"
+                    HorizontalAlignment="Center" VerticalAlignment="Center">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="GAMINGHUB" FontSize="34" FontWeight="Bold" Foreground="{StaticResource AccentBrush}" HorizontalAlignment="Center" />
+                    <TextBlock Text="{x:Bind ViewModel.Title, Mode=OneWay}" FontSize="18" HorizontalAlignment="Center" />
+
+                    <TextBox Header="Usuario (4-24: letras, números, _)" MaxLength="24"
+                             Visibility="{x:Bind ViewModel.ShowUserName, Mode=OneWay}"
+                             Text="{x:Bind ViewModel.UserName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBox Header="Correo electrónico" MaxLength="254"
+                             Visibility="{x:Bind ViewModel.ShowEmail, Mode=OneWay}"
+                             Text="{x:Bind ViewModel.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <PasswordBox x:Name="PasswordInput" MaxLength="64" PasswordRevealMode="Peek"
+                                 Header="{x:Bind ViewModel.PasswordLabel, Mode=OneWay}" PasswordChanged="Password_Changed" />
+                    <PasswordBox x:Name="ConfirmInput" MaxLength="64" PasswordRevealMode="Peek" Header="Confirmar contraseña"
+                                 Visibility="{x:Bind ViewModel.ShowConfirm, Mode=OneWay}" PasswordChanged="Confirm_Changed" />
+                    <TextBlock Text="{x:Bind ViewModel.MatchText, Mode=OneWay}" FontSize="12" Foreground="{StaticResource MutedBrush}"
+                               Visibility="{x:Bind ViewModel.ShowConfirm, Mode=OneWay}" />
+
+                    <!-- Registro -->
+                    <StackPanel Spacing="12" Visibility="{x:Bind ViewModel.IsRegisterMode, Mode=OneWay}">
+                        <CalendarDatePicker Header="Fecha de nacimiento" Date="{x:Bind ViewModel.BirthDate, Mode=TwoWay}" />
+                        <CheckBox Content="Acepto los términos de uso (aplicación local de demostración)" IsChecked="{x:Bind ViewModel.AcceptedTerms, Mode=TwoWay}" />
+                        <Button Content="Crear cuenta" Command="{x:Bind ViewModel.RegisterCommand}" HorizontalAlignment="Stretch" Style="{StaticResource AccentButtonStyle}" />
+                        <HyperlinkButton Content="Ya tengo cuenta" Command="{x:Bind ViewModel.ShowLoginCommand}" />
+                    </StackPanel>
+
+                    <!-- Login -->
+                    <StackPanel Spacing="12" Visibility="{x:Bind ViewModel.IsLoginMode, Mode=OneWay}">
+                        <Button Content="Iniciar sesión" Command="{x:Bind ViewModel.LoginCommand}" HorizontalAlignment="Stretch" Style="{StaticResource AccentButtonStyle}" />
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <HyperlinkButton Content="Crear cuenta" Command="{x:Bind ViewModel.ShowRegisterCommand}" />
+                            <HyperlinkButton Content="¿Olvidaste tu contraseña?" Command="{x:Bind ViewModel.ShowRecoverCommand}" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Recuperación local -->
+                    <StackPanel Spacing="12" Visibility="{x:Bind ViewModel.IsRecoverMode, Mode=OneWay}">
+                        <Button Content="1. Generar token local" Command="{x:Bind ViewModel.RequestTokenCommand}" HorizontalAlignment="Stretch" />
+                        <TextBox Header="Token generado (cópialo abajo)" IsReadOnly="True" Text="{x:Bind ViewModel.GeneratedToken, Mode=OneWay}"
+                                 Visibility="{x:Bind ViewModel.HasGeneratedToken, Mode=OneWay}" />
+                        <TextBox Header="Token de recuperación" MaxLength="128" Text="{x:Bind ViewModel.RecoveryToken, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <Button Content="2. Restablecer contraseña" Command="{x:Bind ViewModel.ResetPasswordCommand}" HorizontalAlignment="Stretch" Style="{StaticResource AccentButtonStyle}" />
+                        <HyperlinkButton Content="Volver al inicio de sesión" Command="{x:Bind ViewModel.ShowLoginCommand}" />
+                    </StackPanel>
+
+                    <ProgressRing IsActive="{x:Bind ViewModel.IsBusy, Mode=OneWay}" Width="28" Height="28" />
+                    <TextBlock Text="{x:Bind ViewModel.ErrorMessage, Mode=OneWay}" Foreground="{StaticResource ErrorBrush}" TextWrapping="Wrap"
+                               Visibility="{x:Bind ViewModel.HasError, Mode=OneWay}" />
+                    <TextBlock Text="{x:Bind ViewModel.SuccessMessage, Mode=OneWay}" Foreground="{StaticResource SuccessBrush}" TextWrapping="Wrap"
+                               Visibility="{x:Bind ViewModel.HasSuccess, Mode=OneWay}" />
+                </StackPanel>
+            </Border>
+        </ScrollViewer>
+    </Grid>
+</Page>

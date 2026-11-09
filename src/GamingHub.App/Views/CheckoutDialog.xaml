@@ -1,0 +1,49 @@
+<ContentDialog
+    x:Class="GamingHub.App.Views.CheckoutDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Procesar pago"
+    PrimaryButtonText="Confirmar y Pagar"
+    CloseButtonText="Cancelar"
+    DefaultButton="Primary"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick">
+
+    <StackPanel Spacing="12" Width="360">
+        <!-- Banner para mostrar errores de validación o del carrito -->
+        <InfoBar x:Name="ErrorBanner" IsOpen="False" Severity="Error" />
+
+        <TextBlock x:Name="TotalText" FontWeight="SemiBold" FontSize="16" />
+        <TextBlock Text="Compra simulada: no se realiza ningún cargo real. Al terminar se genera tu ticket."
+                   TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+
+        <RadioButtons x:Name="MethodSelector" Header="Método de pago" SelectedIndex="0" MaxColumns="2">
+            <x:String>Tarjeta</x:String>
+            <x:String>Transferencia</x:String>
+        </RadioButtons>
+
+        <!-- ===== TARJETA ===== -->
+        <StackPanel x:Name="CardPanel" Spacing="12">
+            <TextBox x:Name="CardHolderInput" Header="Nombre del titular" PlaceholderText="Como aparece en la tarjeta" MaxLength="60" />
+            <TextBox x:Name="CardNumberInput" Header="Número de tarjeta" PlaceholderText="0000 0000 0000 0000" MaxLength="19" />
+            <Grid ColumnDefinitions="*,*">
+                <TextBox x:Name="ExpiryInput" Header="Vencimiento" PlaceholderText="MM/AA" MaxLength="5" Margin="0,0,8,0" TextChanged="ExpiryInput_TextChanged" />
+                <PasswordBox x:Name="CvvInput" Header="CVV" PlaceholderText="123" MaxLength="4" Grid.Column="1" Margin="8,0,0,0" />
+            </Grid>
+        </StackPanel>
+
+        <!-- ===== TRANSFERENCIA ===== -->
+        <StackPanel x:Name="TransferPanel" Spacing="12" Visibility="Collapsed">
+            <TextBlock Text="Beneficiario: GamingHub (demo)" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+            <TextBox x:Name="PayerNameInput" Header="Nombre de quien realiza la transferencia" MaxLength="60" />
+            <ComboBox x:Name="BankInput" Header="Banco de origen" IsEditable="True" HorizontalAlignment="Stretch" PlaceholderText="Selecciona o escribe tu banco" />
+            <TextBox x:Name="AccountInput" Header="Cuenta CLABE de origen (18 dígitos)" PlaceholderText="000000000000000000" MaxLength="22" />
+            <TextBox x:Name="SubjectInput" Header="Asunto de la transferencia" Text="Compra en GamingHub" MaxLength="60" />
+        </StackPanel>
+
+        <!-- Panel de carga (Oculto por defecto) -->
+        <StackPanel x:Name="LoadingPanel" Orientation="Horizontal" Spacing="12" Visibility="Collapsed" Margin="0,16,0,0">
+            <ProgressRing IsActive="True" Width="24" Height="24" />
+            <TextBlock x:Name="LoadingText" Text="Procesando..." VerticalAlignment="Center" FontWeight="SemiBold" />
+        </StackPanel>
+    </StackPanel>
+</ContentDialog>

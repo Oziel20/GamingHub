@@ -1,0 +1,18 @@
+<Window
+    x:Class="GamingHub.App.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Background="{StaticResource BgBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="36" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid x:Name="TitleBarArea" Background="#05080F">
+            <StackPanel Orientation="Horizontal" Margin="12,0" Spacing="8" VerticalAlignment="Center">
+                <FontIcon Glyph="&#xE7FC;" FontSize="14" Foreground="{StaticResource AccentBrush}" />
+                <TextBlock Text="GamingHub" FontSize="12" />
+            </StackPanel>
+        </Grid>
+        <Frame x:Name="RootFrame" Grid.Row="1" />
+    </Grid>
+</Window>

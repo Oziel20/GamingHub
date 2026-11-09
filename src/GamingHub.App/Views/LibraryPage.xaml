@@ -1,0 +1,82 @@
+<Page
+    x:Class="GamingHub.App.Views.LibraryPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:models="using:GamingHub.Core.Models">
+    <ScrollViewer>
+        <StackPanel Margin="24" Spacing="14">
+            <TextBlock Text="Biblioteca" Style="{StaticResource TitleTextBlockStyle}" />
+            <Grid ColumnSpacing="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBox PlaceholderText="Buscar juegos (2 a 100 caracteres)" MaxLength="100" KeyDown="Search_KeyDown"
+                         Text="{x:Bind ViewModel.SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <ComboBox Grid.Column="1" Width="150" ItemsSource="{x:Bind ViewModel.Categories}" SelectedItem="{x:Bind ViewModel.SelectedCategory, Mode=TwoWay}" />
+                <ComboBox Grid.Column="2" Width="170" SelectedIndex="{x:Bind ViewModel.SortIndex, Mode=TwoWay}">
+                    <ComboBoxItem Content="Título A-Z" /><ComboBoxItem Content="Título Z-A" /><ComboBoxItem Content="Más recientes" />
+                    <ComboBoxItem Content="Más antiguos" /><ComboBoxItem Content="Más jugados" />
+                </ComboBox>
+                <Button Grid.Column="3" Content="Buscar" Command="{x:Bind ViewModel.SearchCommand}" Style="{StaticResource AccentButtonStyle}" />
+                <Button Grid.Column="4" Content="Limpiar" Command="{x:Bind ViewModel.ClearSearchCommand}" />
+            </Grid>
+            <ProgressRing IsActive="{x:Bind ViewModel.IsBusy, Mode=OneWay}" Width="24" Height="24" HorizontalAlignment="Left" />
+            <TextBlock Text="{x:Bind ViewModel.ErrorMessage, Mode=OneWay}" Foreground="{StaticResource ErrorBrush}" TextWrapping="Wrap" Visibility="{x:Bind ViewModel.HasError, Mode=OneWay}" />
+            <TextBlock Text="{x:Bind ViewModel.SuccessMessage, Mode=OneWay}" Foreground="{StaticResource SuccessBrush}" TextWrapping="Wrap" Visibility="{x:Bind ViewModel.HasSuccess, Mode=OneWay}" />
+            <TextBlock Text="No se encontraron juegos. Prueba otra búsqueda o agrega un juego local." Foreground="{StaticResource MutedBrush}" Visibility="{x:Bind ViewModel.NoResults, Mode=OneWay}" />
+
+            <GridView ItemsSource="{x:Bind ViewModel.Items}" SelectionMode="None">
+                <GridView.ItemTemplate>
+                    <DataTemplate x:DataType="models:LibraryItemDto">
+                        <Border Width="270" Padding="14" CornerRadius="8" Background="{StaticResource CardBrush}">
+                            <StackPanel Spacing="5">
+                                <Grid Height="150" CornerRadius="6" Background="#1B2B4A">
+                                    <TextBlock Text="{x:Bind Initial}" FontSize="40" Foreground="{StaticResource AccentBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    <Image Stretch="UniformToFill">
+                                        <Image.Source>
+                                            <BitmapImage UriSource="{x:Bind ImageUri}" />
+                                        </Image.Source>
+                                    </Image>
+                                </Grid>
+                                <TextBlock Text="{x:Bind Title}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                                <TextBlock Text="{x:Bind Category}" FontSize="12" Foreground="{StaticResource MutedBrush}" />
+                                <TextBlock Text="{x:Bind InstalledText}" FontSize="12" />
+                                <TextBlock Text="{x:Bind SizeText}" FontSize="12" />
+                                <TextBlock Text="{x:Bind PlayedText}" FontSize="12" />
+                                <TextBlock Text="{x:Bind LastPlayedText}" FontSize="12" />
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <Button Content="Jugar" Tag="{x:Bind GameId}" Click="Play_Click" Visibility="{x:Bind IsLocal}" />
+                                    <Button Content="{x:Bind InstallButtonText}" Tag="{x:Bind GameId}" Click="Install_Click" Visibility="{x:Bind IsStoreGame}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <Button Content="{x:Bind FavoriteText}" Tag="{x:Bind GameId}" Click="Favorite_Click" />
+                                    <Button Content="Eliminar" Tag="{x:Bind GameId}" Click="Remove_Click" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </GridView.ItemTemplate>
+            </GridView>
+
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <Button Content="◀ Anterior" Command="{x:Bind ViewModel.PrevPageCommand}" IsEnabled="{x:Bind ViewModel.CanPrev, Mode=OneWay}" />
+                <TextBlock Text="{x:Bind ViewModel.PageText, Mode=OneWay}" VerticalAlignment="Center" />
+                <Button Content="Siguiente ▶" Command="{x:Bind ViewModel.NextPageCommand}" IsEnabled="{x:Bind ViewModel.CanNext, Mode=OneWay}" />
+            </StackPanel>
+
+            <Expander Header="Agregar juego local (.exe dentro de directorios autorizados)" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                <StackPanel Spacing="8">
+                    <TextBox Header="Título" MaxLength="60" Text="{x:Bind ViewModel.NewTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBox Header="Categoría" MaxLength="30" Text="{x:Bind ViewModel.NewCategory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <Grid ColumnSpacing="8">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                        <TextBox Header="Ejecutable" MaxLength="260" Text="{x:Bind ViewModel.NewPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <Button Grid.Column="1" Content="Examinar…" VerticalAlignment="Bottom" Click="Browse_Click" />
+                    </Grid>
+                    <Button Content="Agregar a la biblioteca" Command="{x:Bind ViewModel.AddLocalCommand}" Style="{StaticResource AccentButtonStyle}" />
+                </StackPanel>
+            </Expander>
+        </StackPanel>
+    </ScrollViewer>
+</Page>
