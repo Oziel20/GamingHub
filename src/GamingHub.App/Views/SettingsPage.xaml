@@ -41,7 +41,7 @@
                             <StackPanel Spacing="4" Padding="0,6">
                                 <TextBlock Text="{x:Bind Text}" TextWrapping="Wrap" />
                                 <StackPanel Orientation="Horizontal" Spacing="6">
-                                    <Button Content="Desbloquear" Tag="{x:Bind Id}" Click="Unlock_Click" />
+                                    <Button Content="{x:Bind BlockActionText}" Tag="{x:Bind Id}" Click="ToggleBlock_Click" />
                                     <Button Content="Revocar sesiones" Tag="{x:Bind Id}" Click="Revoke_Click" />
                                 </StackPanel>
                             </StackPanel>

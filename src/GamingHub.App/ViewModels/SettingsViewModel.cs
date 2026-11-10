@@ -51,7 +51,7 @@ public sealed partial class SettingsViewModel : ViewModelBase
     });
 
     [RelayCommand] private Task RemoveRootAsync(string? path) => Act(() => _settings.RemoveRootAsync(path));
-    [RelayCommand] private Task UnlockAsync(Guid id) => Act(() => _admin.UnlockUserAsync(id));
+    [RelayCommand] private Task ToggleBlockAsync(Guid id) => Act(() => _admin.ToggleUserBlockAsync(id));
     [RelayCommand] private Task RevokeAsync(Guid id) => Act(() => _admin.RevokeSessionsAsync(id));
 
     [RelayCommand]

@@ -16,6 +16,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="Assets\Covers\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
     <Content Remove="Assets\Games\pokemon-brilliant-diamond.svg" />
     <Content Remove="Assets\Games\pokemon-legends-arceus.svg" />
     <Content Remove="Assets\Games\pokemon-lets-go-eevee.svg" />
@@ -44,9 +48,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Update="Assets\AppIcon %281%29.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="Assets\Covers\Pokémon Legends Arceus.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

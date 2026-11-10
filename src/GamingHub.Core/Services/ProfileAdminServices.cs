@@ -81,24 +81,34 @@ public sealed class AdminService
         if (await _auth.GetCurrentAdminAsync(ct) is null) return OperationResult<List<UserAdminDto>>.Forbidden();
         var now = _time.GetUtcNow().UtcDateTime;
         var list = await _s.Users.ReadAsync(d => d.Users.OrderBy(u => u.UserName)
-            .Select(u => new UserAdminDto(u.Id, u.UserName, u.Email, u.Role, u.LockedUntilUtc > now, u.IsOnline)).ToList(), ct);
+            .Select(u => new UserAdminDto(u.Id, u.UserName, u.Email, u.Role, u.IsBlocked, u.IsOnline)).ToList(), ct);
         return OperationResult<List<UserAdminDto>>.Ok(list);
     }
 
-    public async Task<OperationResult> UnlockUserAsync(Guid userId, CancellationToken ct = default)
+    public async Task<OperationResult> ToggleUserBlockAsync(Guid userId, CancellationToken ct = default)
     {
         var admin = await _auth.GetCurrentAdminAsync(ct);
         if (admin is null) return OperationResult.Fail(ErrorCodes.Forbidden, "No tienes permisos de administrador.");
+        if (admin.Id == userId) return OperationResult.Fail(ErrorCodes.Invalid, "No puedes bloquear tu propia cuenta.");
         var r = await _s.Users.UpdateAsync(d =>
         {
             var u = d.Users.FirstOrDefault(x => x.Id == userId);
             if (u is null) return (false, OperationResult.Fail(ErrorCodes.NotFound, "Usuario no encontrado."));
-            u.FailedAttempts = 0; u.LockedUntilUtc = null;
-            return (true, OperationResult.Ok("Cuenta desbloqueada."));
+            u.IsBlocked = !u.IsBlocked;
+            if (!u.IsBlocked) { u.FailedAttempts = 0; u.LockedUntilUtc = null; }
+            return (true, OperationResult.Ok(u.IsBlocked ? "Cuenta bloqueada." : "Cuenta desbloqueada."));
         }, ct);
-        if (r.Success) await _act.LogAsync(admin.Id, "Administración", $"Cuenta desbloqueada: {userId}", ct);
+        if (r.Success)
+        {
+            var blocked = await _s.Users.ReadAsync(d => d.Users.First(u => u.Id == userId).IsBlocked, ct);
+            if (blocked) await _auth.RevokeSessionsAsync(userId, ct);
+            await _act.LogAsync(admin.Id, "Administración", $"Cuenta {(blocked ? "bloqueada" : "desbloqueada")}: {userId}", ct);
+        }
         return r;
     }
+
+    public Task<OperationResult> UnlockUserAsync(Guid userId, CancellationToken ct = default) =>
+        ToggleUserBlockAsync(userId, ct);
 
     public async Task<OperationResult> RevokeSessionsAsync(Guid userId, CancellationToken ct = default)
     {

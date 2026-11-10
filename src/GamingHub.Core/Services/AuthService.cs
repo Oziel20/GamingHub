@@ -94,6 +94,11 @@ public sealed class AuthService
             _log.LogWarning("Login attempt for unknown user");
             return OperationResult<AuthSession>.Fail(ErrorCodes.AuthFailed, Generic);
         }
+        if (user.IsBlocked)
+        {
+            _log.LogWarning("Login attempt on administratively blocked account {UserId}", user.Id);
+            return OperationResult<AuthSession>.Fail(ErrorCodes.AuthFailed, Generic);
+        }
         if (user.LockedUntilUtc > now)
         {
             _log.LogWarning("Login attempt on temporarily locked account {UserId}", user.Id);

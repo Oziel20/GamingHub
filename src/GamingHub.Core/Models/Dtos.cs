@@ -19,26 +19,26 @@ public static class GameImageUrls
 {
     private static readonly IReadOnlyDictionary<string, string> Covers = new Dictionary<string, string>
     {
-        ["minecraft"] = "https://assets.nintendo.com/image/upload/q_auto/f_auto/store/software/switch/70010000000964/a28a81253e919298beab2295e39a56b7a5140ef15abdb56135655e5c221b2a3a",
-        ["fortnite"] = "https://cdn1.epicgames.com/offer/fn/FNBR_43-00_MSEE_KeyArt_FN_Logo_EGS_Launcher_Blade_2560x1440_2560x1440-b575b2bd2d0d4892b520b4262617de93",
-        ["gta-v"] = "https://cdn.cloudflare.steamstatic.com/steam/apps/271590/header.jpg",
-        ["ea-sports-fc-25"] = "https://cdn.cloudflare.steamstatic.com/steam/apps/2669320/header.jpg",
-        ["forza-horizon-5"] = "https://cdn.cloudflare.steamstatic.com/steam/apps/1551360/header.jpg",
-        ["elden-ring"] = "https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/header.jpg",
-        ["the-witcher-3"] = "https://cdn.cloudflare.steamstatic.com/steam/apps/292030/header.jpg",
-        ["baldurs-gate-3"] = "https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg",
-        ["hogwarts-legacy"] = "https://cdn.cloudflare.steamstatic.com/steam/apps/990080/header.jpg",
-        ["cyberpunk-2077"] = "https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/header.jpg",
-        ["red-dead-redemption-2"] = "https://cdn.cloudflare.steamstatic.com/steam/apps/1174180/header.jpg",
-        ["god-of-war-ragnarok"] = "https://cdn.cloudflare.steamstatic.com/steam/apps/2322010/header.jpg",
-        ["resident-evil-4"] = "https://cdn.cloudflare.steamstatic.com/steam/apps/2050650/header.jpg",
-        ["assassins-creed-shadows"] = "https://cdn.cloudflare.steamstatic.com/steam/apps/3159330/header.jpg",
-        ["civilization-vi"] = "https://cdn.cloudflare.steamstatic.com/steam/apps/289070/header.jpg",
-        ["age-of-empires-iv"] = "https://cdn.cloudflare.steamstatic.com/steam/apps/1466860/header.jpg",
-        ["the-sims-4"] = "https://cdn.cloudflare.steamstatic.com/steam/apps/1222670/header.jpg",
-        ["hogwarts-legacy-platform"] = "https://cdn.cloudflare.steamstatic.com/steam/apps/367520/header.jpg",
-        ["stardew-valley"] = "https://cdn.cloudflare.steamstatic.com/steam/apps/413150/header.jpg",
-        ["rocket-league"] = "https://cdn.cloudflare.steamstatic.com/steam/apps/252950/header.jpg"
+        ["minecraft"] = "ms-appx:///Assets/Covers/Minecraft.jpg",
+        ["fortnite"] = "ms-appx:///Assets/Covers/Fortnite.jpg",
+        ["gta-v"] = "ms-appx:///Assets/Covers/Gta%20V.jpg",
+        ["ea-sports-fc-25"] = "ms-appx:///Assets/Covers/ea-sports-fc-25.jpg",
+        ["forza-horizon-5"] = "ms-appx:///Assets/Covers/forza-horizon-5.jpg",
+        ["elden-ring"] = "ms-appx:///Assets/Covers/elden-ring.jpg",
+        ["the-witcher-3"] = "ms-appx:///Assets/Covers/the-witcher-3.jpg",
+        ["baldurs-gate-3"] = "ms-appx:///Assets/Covers/baldurs-gate-3.jpg",
+        ["hogwarts-legacy"] = "ms-appx:///Assets/Covers/hogwarts-legacy.jpg",
+        ["cyberpunk-2077"] = "ms-appx:///Assets/Covers/cyberpunk-2077.jpg",
+        ["red-dead-redemption-2"] = "ms-appx:///Assets/Covers/red-dead-redemption-2.jpg",
+        ["god-of-war-ragnarok"] = "ms-appx:///Assets/Covers/god-of-war-ragnarok.jpg",
+        ["resident-evil-4"] = "ms-appx:///Assets/Covers/resident-evil-4.jpg",
+        ["assassins-creed-shadows"] = "ms-appx:///Assets/Covers/assassins-creed-shadows.jpg",
+        ["civilization-vi"] = "ms-appx:///Assets/Covers/civilization-vi.jpg",
+        ["age-of-empires-iv"] = "ms-appx:///Assets/Covers/age-of-empires-iv.jpg",
+        ["the-sims-4"] = "ms-appx:///Assets/Covers/the-sims-4.jpg",
+        ["hogwarts-legacy-platform"] = "ms-appx:///Assets/Covers/Hollow%20Knight.jpg",
+        ["stardew-valley"] = "ms-appx:///Assets/Covers/stardew-valley.jpg",
+        ["rocket-league"] = "ms-appx:///Assets/Covers/rocket-league.jpg"
     };
 
     public static string For(string gameId) => Covers.TryGetValue(gameId, out var cover)
@@ -131,5 +131,6 @@ public sealed record DashboardSummary(string DisplayName, int GamesCount, long P
 
 public sealed record UserAdminDto(Guid Id, string UserName, string Email, UserRole Role, bool Locked, bool Online)
 {
-    public string Text => $"{UserName} · {Email} · {Role}{(Locked ? " · BLOQUEADO TEMPORALMENTE" : "")}";
+    public string Text => $"{UserName} · {Email} · {Role}{(Locked ? " · BLOQUEADO" : "")}";
+    public string BlockActionText => Locked ? "Desbloquear" : "Bloquear";
 }

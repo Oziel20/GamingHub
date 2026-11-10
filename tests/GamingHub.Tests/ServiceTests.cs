@@ -127,6 +127,24 @@ public class AuthServiceTests
         (await admin.UnlockUserAsync(Guid.NewGuid())).Success.Should().BeFalse();
         (await e.Settings.AddRootAsync(Path.GetTempPath())).Code.Should().Be(ErrorCodes.Forbidden);
     }
+
+    [Fact] public async Task Admin_can_block_and_unblock_account()
+    {
+        using var e = new TestEnv();
+        await e.RegisterAsync("first_user");
+        var target = await e.RegisterAsync("normal_user");
+        await e.Auth.LoginAsync("first_user", TestEnv.Pw);
+        var admin = new AdminService(e.Auth, e.Stores, e.Clock, e.Activity);
+
+        (await admin.ToggleUserBlockAsync(target.Id)).Success.Should().BeTrue();
+        (await admin.ListUsersAsync()).Value!.Single(x => x.Id == target.Id).BlockActionText.Should().Be("Desbloquear");
+        (await e.Auth.LoginAsync("normal_user", TestEnv.Pw)).Success.Should().BeFalse();
+
+        await e.Auth.LoginAsync("first_user", TestEnv.Pw);
+        (await admin.ToggleUserBlockAsync(target.Id)).Success.Should().BeTrue();
+        (await admin.ListUsersAsync()).Value!.Single(x => x.Id == target.Id).BlockActionText.Should().Be("Bloquear");
+        (await e.Auth.LoginAsync("normal_user", TestEnv.Pw)).Success.Should().BeTrue();
+    }
 }
 
 public class LibraryServiceTests

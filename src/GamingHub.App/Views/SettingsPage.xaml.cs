@@ -18,7 +18,7 @@ public sealed partial class SettingsPage : Page
 
     private void OnLoggedOut() => App.Main.Root.Navigate(typeof(LoginPage));
     private static Guid Id(object sender) => (sender as Button)?.Tag is Guid g ? g : Guid.Empty;
-    private void Unlock_Click(object sender, RoutedEventArgs e) => ViewModel.UnlockCommand.Execute(Id(sender));
+    private void ToggleBlock_Click(object sender, RoutedEventArgs e) => ViewModel.ToggleBlockCommand.Execute(Id(sender));
     private void Revoke_Click(object sender, RoutedEventArgs e) => ViewModel.RevokeCommand.Execute(Id(sender));
     private void RemoveRoot_Click(object sender, RoutedEventArgs e) => ViewModel.RemoveRootCommand.Execute((sender as Button)?.Tag as string);
     private void RemoveTyped_Click(object sender, RoutedEventArgs e) => ViewModel.RemoveRootCommand.Execute(ViewModel.NewRoot);

@@ -20,6 +20,7 @@ public sealed class User
     public bool IsOnline { get; set; }
     public int FailedAttempts { get; set; }
     public DateTime? LockedUntilUtc { get; set; }
+    public bool IsBlocked { get; set; }
     public DateTime? LastFailedUtc { get; set; }
     public User Clone() => (User)MemberwiseClone();
 }
