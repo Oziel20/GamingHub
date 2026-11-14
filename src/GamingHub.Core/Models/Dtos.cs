@@ -1,3 +1,4 @@
+
 namespace GamingHub.Core.Models;
 
 public static class Formatters

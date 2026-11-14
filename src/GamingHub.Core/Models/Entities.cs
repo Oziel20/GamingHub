@@ -121,6 +121,7 @@ public sealed class ChatMessage
     public Guid Id { get; set; } = Guid.NewGuid();
     public Guid FromId { get; set; }
     public Guid ToId { get; set; }
+    public string Sender { get; set; } = "";
     public string Text { get; set; } = "";
     public DateTime Utc { get; set; }
 }

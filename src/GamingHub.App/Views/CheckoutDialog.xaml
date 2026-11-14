@@ -25,9 +25,10 @@
         <StackPanel x:Name="CardPanel" Spacing="12">
             <TextBox x:Name="CardHolderInput" Header="Nombre del titular" PlaceholderText="Como aparece en la tarjeta" MaxLength="60" />
             <TextBox x:Name="CardNumberInput" Header="Número de tarjeta" PlaceholderText="0000 0000 0000 0000" MaxLength="19" />
-            <Grid ColumnDefinitions="*,*">
-                <TextBox x:Name="ExpiryInput" Header="Vencimiento" PlaceholderText="MM/AA" MaxLength="5" Margin="0,0,8,0" TextChanged="ExpiryInput_TextChanged" />
-                <PasswordBox x:Name="CvvInput" Header="CVV" PlaceholderText="123" MaxLength="4" Grid.Column="1" Margin="8,0,0,0" />
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+                <ComboBox x:Name="ExpiryMonthInput" Header="Mes" PlaceholderText="MM" HorizontalAlignment="Stretch" />
+                <ComboBox x:Name="ExpiryYearInput" Header="Año" PlaceholderText="AAAA" Grid.Column="1" HorizontalAlignment="Stretch" />
+                <PasswordBox x:Name="CvvInput" Header="CVV" PlaceholderText="123" MaxLength="4" Grid.Column="2" />
             </Grid>
         </StackPanel>
 

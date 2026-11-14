@@ -9,7 +9,6 @@ namespace GamingHub.App.Views;
 public sealed partial class CheckoutDialog : ContentDialog
 {
     private readonly StoreService _storeService;
-    private int _previousLength = 0; // Variable para controlar la diagonal del vencimiento
 
     /// <summary>Ticket de la compra confirmada. Es null si el usuario canceló o el pago falló.</summary>
     public Ticket? CompletedTicket { get; private set; }
@@ -21,6 +20,11 @@ public sealed partial class CheckoutDialog : ContentDialog
         _storeService = App.GetService<StoreService>();
 
         BankInput.ItemsSource = PaymentValidator.CommonBanks;
+        ExpiryMonthInput.ItemsSource = Enumerable.Range(1, 12).Select(month => $"{month:00}").ToList();
+        var currentYear = DateTime.UtcNow.Year;
+        ExpiryYearInput.ItemsSource = Enumerable.Range(currentYear, 21).Select(year => year.ToString()).ToList();
+        ExpiryMonthInput.SelectedIndex = DateTime.UtcNow.Month - 1;
+        ExpiryYearInput.SelectedIndex = 0;
         MethodSelector.SelectionChanged += (_, _) => UpdateMethodPanels();
         Opened += async (_, _) => await ShowTotalAsync();
     }
@@ -41,23 +45,6 @@ public sealed partial class CheckoutDialog : ContentDialog
             TotalText.Text = $"Total a pagar: {cart.Value.Sum(i => i.Price):0.00} {cart.Value[0].Currency}";
     }
 
-    // EVENTO: Pone la diagonal "/" automáticamente en la fecha
-    private void ExpiryInput_TextChanged(object sender, TextChangedEventArgs e)
-    {
-        var textBox = sender as TextBox;
-        if (textBox == null) return;
-
-        string text = textBox.Text;
-
-        if (text.Length == 2 && _previousLength < 2 && !text.Contains("/"))
-        {
-            textBox.Text = text + "/";
-            textBox.SelectionStart = textBox.Text.Length;
-        }
-
-        _previousLength = textBox.Text.Length;
-    }
-
     private PaymentInfo BuildPayment()
     {
         if (IsTransfer)
@@ -71,11 +58,14 @@ public sealed partial class CheckoutDialog : ContentDialog
                 Subject = SubjectInput.Text
             };
         }
+        var month = ExpiryMonthInput.SelectedItem as string ?? "";
+        var year = ExpiryYearInput.SelectedItem as string ?? "";
+        var expiry = month.Length == 2 && year.Length == 4 ? $"{month}/{year[2..]}" : "";
         return new PaymentInfo(PaymentMethod.Card)
         {
             CardNumber = CardNumberInput.Text,
             CardHolder = CardHolderInput.Text,
-            CardExpiry = ExpiryInput.Text.Trim()
+            CardExpiry = expiry
         };
     }
 
@@ -140,7 +130,8 @@ public sealed partial class CheckoutDialog : ContentDialog
         MethodSelector.IsEnabled = !busy;
         CardHolderInput.IsEnabled = !busy;
         CardNumberInput.IsEnabled = !busy;
-        ExpiryInput.IsEnabled = !busy;
+        ExpiryMonthInput.IsEnabled = !busy;
+        ExpiryYearInput.IsEnabled = !busy;
         CvvInput.IsEnabled = !busy;
         PayerNameInput.IsEnabled = !busy;
         BankInput.IsEnabled = !busy;
